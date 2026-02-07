@@ -1,0 +1,14 @@
+[package]
+name = "backend"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = { version = "0.8.8", features = ["tokio"] }
+chrono = { version = "0.4.43", features = ["serde"] }
+dotenvy = "0.15.7"
+serde = {version = "1.0.228", features=["derive"]}
+serde_json = "1.0.149"
+sqlx = {version = "0.8.6", features = ["postgres", "runtime-tokio","uuid"]}
+tokio = {version = "1.49.0", features=  ["rt-multi-thread"]}
+uuid = { version = "1.20.0", features = ["serde", "v4"] }
