@@ -1,5 +1,5 @@
 use crate::models::projects::{PostProject, ProjectDetail};
-use axum::extract::State;
+use axum::extract::{Path, State};
 use axum::http::StatusCode;
 use axum::Json;
 use sqlx::PgPool;
@@ -89,4 +89,19 @@ pub async fn insert_project(
     .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
     Ok(Json(project_id))
+}
+struct Param(i32);
+async fn delete_project(
+    State(pool): State<PgPool>,
+    Path(params): Path<Param>,
+) -> Result<Json<Uuid>, StatusCode> {
+    let id: Uuid = sqlx::query_as!(
+        r#"
+        DELETE FROM projects WHERE id = $1 RETURNING id
+    "#,
+        params
+    )
+    .execute(&pool)
+    .await
+    .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 }
